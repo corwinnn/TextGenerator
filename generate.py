@@ -9,15 +9,16 @@ def init(dump):
     with open(dump, 'rb') as file:
         d = pickle.load(file)
         for word in d:
-            kol = 0
+            word_number = 0
             for s_word in d[word]:
-                kol += d[word][s_word]
+                word_number += d[word][s_word]
             for s_word in d[word]:
-                d[word][s_word] /= kol
+                d[word][s_word] /= word_number
     return d
 
 
 def generate(model, seed, length, output):
+    symbols_in_line = 20
     d = init(model)
     words = list(d.keys())
     word = random.choice(words)
@@ -29,7 +30,7 @@ def generate(model, seed, length, output):
     text = ''
     for i in range(length):
         text = text + word + ' '
-        if i % 20 == 0 and i > 0:
+        if i % symbols_in_line == 0 and i > 0:
             text += '\n'
         if word not in d:
             word = random.choice(words)
@@ -46,4 +47,3 @@ parser.add_argument('--output', action='store', help='choose the directory to wr
 parser.add_argument('--model', action='store', help='choose the directory with files for dump to programm', required=True)
 args = parser.parse_args()
 generate(args.model, args.seed, args.length, args.output)
-# generate('Qtest0.txt', 'Just', 100, 'Wtest0.txt')
