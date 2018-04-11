@@ -2,26 +2,20 @@ import argparse
 import pickle
 import fileinput
 import sys
+import re
+from collections import defaultdict
 
 
 def train(line, d, previous_word):
-    line_copy = ''
     if args.lc:
         line = line.lower()
-    for symb in line:
-        if symb.isalpha() or symb == ' ':
-            line_copy += symb
-    line_copy = previous_word + ' ' + line_copy
-    l = line_copy.split()
-    for i in range(len(l) - 1):
-        if not l[i] in d:
-            d[l[i]] = dict()
-        if l[i + 1] in d[l[i]]:
-            d[l[i]][l[i + 1]] += 1
-        else:
-            d[l[i]][l[i + 1]] = 1
-    if len(l) > 0:
-        previous_word = l[-1]
+    words_list = re.findall('\w+', line)
+    for i in range(len(words_list) - 1):
+        if not words_list[i] in d:
+            d[words_list[i]] = defaultdict(int)
+        d[words_list[i]][words_list[i + 1]] += 1
+    if len(words_list) > 0:
+        previous_word = words_list[-1]
     else:
         previous_word = ''
     return previous_word
@@ -34,15 +28,10 @@ def read_from_file(given, model):
         text = open(given, 'r', encoding='utf-8')
     word = ''
     for line in text:
-        print(line)
         word = train(line, d, word)
-    # for word in d:
-      #  print(word, d[word])
     if model is not None:
         with open(model, 'wb') as f:
             pickle.dump(d, f)
-    else:
-        print('error')
     text.close()
 
 
