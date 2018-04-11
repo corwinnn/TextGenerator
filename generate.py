@@ -6,6 +6,12 @@ import numpy as np
 
 
 def init(dump):
+    '''
+    Достает из данного файла словарь, полученный при тренировке.
+    Нормирует значения, чтобы получалась вероятность.
+    :param dump:
+    :return:
+    '''
     with open(dump, 'rb') as file:
         d = pickle.load(file)
         for word in d:
@@ -18,6 +24,17 @@ def init(dump):
 
 
 def generate(model, seed, length, output):
+    '''
+    Генерирует последовательность слов длины length.
+    Начальное слово - seed.
+    Словарь лежит в model.
+    Результат выводит в output.
+    :param model:
+    :param seed:
+    :param length:
+    :param output:
+    :return:
+    '''
     symbols_in_line = 20
     d = init(model)
     words = list(d.keys())
@@ -32,6 +49,8 @@ def generate(model, seed, length, output):
         text = text + word + ' '
         if i % symbols_in_line == 0 and i > 0:
             text += '\n'
+            out.write(text)
+            text = ''
         if word not in d:
             word = random.choice(words)
         else:
@@ -40,10 +59,11 @@ def generate(model, seed, length, output):
     out.close()
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--seed', action='store', type=str, help='first word')
-parser.add_argument('--length', action='store', type=int, help='length', required=True)
-parser.add_argument('--output', action='store', help='choose the directory to write the text')
-parser.add_argument('--model', action='store', help='choose the directory with files for dump to programm', required=True)
-args = parser.parse_args()
-generate(args.model, args.seed, args.length, args.output)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--seed', action='store', type=str, help='first word')
+    parser.add_argument('--length', action='store', type=int, help='length', required=True)
+    parser.add_argument('--output', action='store', help='choose the directory to write the text')
+    parser.add_argument('--model', action='store', help='choose the directory with files for dump to programm', required=True)
+    args = parser.parse_args()
+    generate(args.model, args.seed, args.length, args.output)
