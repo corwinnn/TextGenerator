@@ -1,6 +1,5 @@
 import argparse
 import pickle
-import fileinput
 import sys
 import re
 from collections import defaultdict
@@ -9,10 +8,10 @@ from collections import defaultdict
 def train(line, d, previous_word):
     """
     Записываем в словарь d слова из строчки line, учитывая последнее слово предыдущей строчки
-    :param line:
-    :param d:
-    :param previous_word:
-    :return:
+    :param line: строка для тренировки
+    :param d: словарь для записи
+    :param previous_word: последнее слово предыдущей строки
+    :return: последнее слово этой строки
     """
     line = previous_word + ' ' + line
     if args.lc:
@@ -30,12 +29,11 @@ def train(line, d, previous_word):
 
 
 def read_from_file(given, model):
-    '''
+    """
     На данном тексте given тренируем программу, получая словарь. Кладем его в файл model.
-    :param given:
-    :param model:
-    :return:
-    '''
+    :param given: данный текст
+    :param model: место для записи
+    """
     d = dict()
     text = sys.stdin
     if given is not None:

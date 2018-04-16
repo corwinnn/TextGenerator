@@ -6,12 +6,12 @@ import numpy as np
 
 
 def init(dump):
-    '''
+    """
     Достает из данного файла словарь, полученный при тренировке.
     Нормирует значения, чтобы получалась вероятность.
-    :param dump:
-    :return:
-    '''
+    :param dump: даннный файл
+    :return: полученный словарь
+    """
     with open(dump, 'rb') as file:
         d = pickle.load(file)
         for word in d:
@@ -23,19 +23,18 @@ def init(dump):
     return d
 
 
-def generate(model, seed, length, output):
-    '''
+def generate(model, seed, length, output, symbols_in_line=20):
+    """
     Генерирует последовательность слов длины length.
     Начальное слово - seed.
     Словарь лежит в model.
     Результат выводит в output.
-    :param model:
-    :param seed:
-    :param length:
-    :param output:
-    :return:
-    '''
-    symbols_in_line = 20
+    :param symbols_in_line: кол-во символов помещающихся в строку
+    :param model: файл со словарем
+    :param seed: начальное слово
+    :param length: длина генерируемой последовательности
+    :param output: куда записать ответ
+    """
     d = init(model)
     words = list(d.keys())
     word = random.choice(words)
@@ -64,6 +63,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', action='store', type=str, help='first word')
     parser.add_argument('--length', action='store', type=int, help='length', required=True)
     parser.add_argument('--output', action='store', help='choose the directory to write the text')
-    parser.add_argument('--model', action='store', help='choose the directory with files for dump to programm', required=True)
+    parser.add_argument('--model', action='store', help='choose the directory'
+                                                        ' with files for dump to programm', required=True)
     args = parser.parse_args()
     generate(args.model, args.seed, args.length, args.output)
