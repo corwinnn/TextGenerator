@@ -7,7 +7,8 @@ from collections import defaultdict
 
 def train(line, d, previous_word):
     """
-    Записываем в словарь d слова из строчки line, учитывая последнее слово предыдущей строчки
+    Записываем в словарь d слова из строчки line,
+    учитывая последнее слово предыдущей строчки
     :param line: строка для тренировки
     :param d: словарь для записи
     :param previous_word: последнее слово предыдущей строки
@@ -16,7 +17,7 @@ def train(line, d, previous_word):
     line = previous_word + ' ' + line
     if args.lc:
         line = line.lower()
-    words_list = re.findall('\w+', line)
+    words_list = re.findall(r'\w+', line)
     for i in range(len(words_list) - 1):
         if not words_list[i] in d:
             d[words_list[i]] = defaultdict(int)
@@ -30,7 +31,8 @@ def train(line, d, previous_word):
 
 def read_from_file(given, model):
     """
-    На данном тексте given тренируем программу, получая словарь. Кладем его в файл model.
+    На данном тексте given тренируем программу,
+    получая словарь. Кладем его в файл model.
     :param given: данный текст
     :param model: место для записи
     """
@@ -49,8 +51,12 @@ def read_from_file(given, model):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--lc', action='store_true', help='transform to lower case')
-    parser.add_argument('--input_dir', action='store', help='choose the directory with files for training')
-    parser.add_argument('--model', action='store', help='choose the directory with files for dump', required=True)
+    parser.add_argument('--lc', action='store_true',
+                        help='transform to lower case')
+    parser.add_argument('--input_dir', action='store',
+                        help='choose the directory with files for training')
+    parser.add_argument('--model', action='store',
+                        help='choose the directory with files for dump',
+                        required=True)
     args = parser.parse_args()
     read_from_file(args.input_dir, args.model)

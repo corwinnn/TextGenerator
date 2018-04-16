@@ -53,7 +53,8 @@ def generate(model, seed, length, output, symbols_in_line=20):
         if word not in d:
             word = random.choice(words)
         else:
-            word = np.random.choice(list(d[word].keys()), 1, p=list(d[word].values()))[0]
+            word = np.random.choice(list(d[word].keys()),
+                                    1, p=list(d[word].values()))[0]
     out.write(text)
     out.close()
 
@@ -61,9 +62,13 @@ def generate(model, seed, length, output, symbols_in_line=20):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--seed', action='store', type=str, help='first word')
-    parser.add_argument('--length', action='store', type=int, help='length', required=True)
-    parser.add_argument('--output', action='store', help='choose the directory to write the text')
-    parser.add_argument('--model', action='store', help='choose the directory'
-                                                        ' with files for dump to programm', required=True)
+    parser.add_argument('--length', action='store',
+                        type=int, help='length', required=True)
+    parser.add_argument('--output', action='store',
+                        help='choose the directory to write the text')
+    parser.add_argument('--model', action='store',
+                        help='choose the directory with files'
+                        ' for dump to programm',
+                        required=True)
     args = parser.parse_args()
     generate(args.model, args.seed, args.length, args.output)
