@@ -40,7 +40,7 @@ def generate(model, seed, length, output, symbols_in_line=20):
     word = random.choice(words)
     if seed is not None:
         word = seed
-    out = sys.stdin
+    out = sys.stdout
     if output is not None:
         out = open(output, 'w', encoding='utf-8')
     text = ''
