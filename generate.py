@@ -13,14 +13,12 @@ def init(dump):
     :return: полученный словарь
     """
     with open(dump, 'rb') as file:
-        d = pickle.load(file)
-        for word in d:
-            word_number = 0
-            for s_word in d[word]:
-                word_number += d[word][s_word]
-            for s_word in d[word]:
-                d[word][s_word] /= word_number
-    return d
+        words_dict = pickle.load(file)
+        for word in words_dict:
+            word_number = sum(words_dict[word].values())
+            for s_word in words_dict[word]:
+                words_dict[word][s_word] /= word_number
+    return words_dict
 
 
 def generate(model, seed, length, output, symbols_in_line=20):
@@ -35,8 +33,8 @@ def generate(model, seed, length, output, symbols_in_line=20):
     :param length: длина генерируемой последовательности
     :param output: куда записать ответ
     """
-    d = init(model)
-    words = list(d.keys())
+    words_dict = init(model)
+    words = list(words_dict.keys())
     word = random.choice(words)
     if seed is not None:
         word = seed
@@ -50,11 +48,11 @@ def generate(model, seed, length, output, symbols_in_line=20):
             text += '\n'
             out.write(text)
             text = ''
-        if word not in d:
+        if word not in words_dict:
             word = random.choice(words)
         else:
-            word = np.random.choice(list(d[word].keys()),
-                                    1, p=list(d[word].values()))[0]
+            word = np.random.choice(list(words_dict[word].keys()),
+                                    1, p=list(words_dict[word].values()))[0]
     out.write(text)
     out.close()
 
