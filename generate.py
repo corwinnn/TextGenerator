@@ -35,12 +35,14 @@ def generate(model, seed, length, output, symbols_in_line=20):
     """
     words_dict = init(model)
     words = list(words_dict.keys())
-    word = random.choice(words)
     if seed is not None:
         word = seed
-    out = sys.stdout
+    else:
+        word = random.choice(words)
     if output is not None:
         out = open(output, 'w', encoding='utf-8')
+    else:
+        out = sys.stdout        
     text = ''
     for i in range(length):
         text = text + word + ' '
