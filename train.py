@@ -30,26 +30,28 @@ def train(line, words_dict, previous_word):
     return previous_word
 
 
-def read_from_dir(given_dir, model):
+def get_dict_from_dir_to_model(given_dir, file_for_model):
     """
-    На данном тексте given тренируем программу,
-    получая словарь. Кладем его в файл model.
-    :param given: данный текст
-    :param model: место для записи
+    На данном тексте из директории given_dir тренируем программу,
+    получая словарь. Кладем его в файл file_for_model.
+    :param given_dir: данная директория
+    :param file_for_model: место для записи модели
     """
     words_dict = dict()
-    text = sys.stdin
     if given_dir is not None:
         for file in os.listdir(given_dir):
             if file.endswith(".txt"):
                 input_file = given_dir + "/" + str(file)
-                text = open(input_file, 'r', encoding='utf-8')
-                word = ''
-                for line in text:
-                    word = train(line, words_dict, word)
-    with open(model, 'wb') as f:
+                with open(input_file, 'r', encoding='utf-8') as text:
+                    word = ''
+                    for line in text:
+                        word = train(line, words_dict, word)
+    else:
+        word = ''
+        for line in sys.stdin:
+            word = train(line, words_dict, word)
+    with open(file_for_model, 'wb') as f:
         pickle.dump(words_dict, f)
-    text.close()
 
 
 if __name__ == '__main__':
@@ -62,4 +64,4 @@ if __name__ == '__main__':
                         help='choose the directory with files for dump',
                         required=True)
     args = parser.parse_args()
-    read_from_dir(args.input_dir, args.model)
+    get_dict_from_dir_to_model(args.input_dir, args.model)

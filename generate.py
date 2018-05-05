@@ -16,8 +16,8 @@ def init(dump):
         words_dict = pickle.load(file)
         for word in words_dict:
             word_number = sum(words_dict[word].values())
-            for s_word in words_dict[word]:
-                words_dict[word][s_word] /= word_number
+            for second_word in words_dict[word]:
+                words_dict[word][second_word] /= word_number
     return words_dict
 
 
